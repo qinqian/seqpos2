@@ -1,0 +1,38 @@
+#!/usr/bin/python
+
+"""
+a tool to scan fasta file for finding motif hits,
+motif region with maximum value, or mean value
+"""
+
+import sys
+import numpy as np
+import argparse
+import os
+import bgcount
+import _motif
+
+if __name__ == '__main__':
+    p = argparse.ArgumentParser()
+    p.add_argument('-f', help='fasta file')
+    p.add_argument('-p', help='pwm file')
+    p.add_argument('-m', type=int, default=1, help='score mode for a sequence, default maximum score: 1, or mean: 0')
+    p.add_argument('-o', help='output file path')
+    args = p.parse_args()
+    
+    if not (args.f and args.p):
+        p.print_help()
+        sys.exit(1)
+
+    fa, fa_name = bgcount.scanfa(args.f)
+    if not os.path.exists(args.f + '.npy'):
+        bg = bgcount.count(fa)
+        np.save(args.f + '.npy', bg)
+    else:
+        bg = np.load(args.f + '.npy')
+    p = np.loadtxt(args.p)
+    markov_order = 2
+    s_idx, start, end, orient, score = _motif.seqscan(fa, p, list(bg), markov_order, args.m)
+    with open(args.o, 'w') as outf:
+        for i, j in zip(s_idx,score):
+            print >>outf, fa_name[i], j
