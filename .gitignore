@@ -8,3 +8,5 @@ hg38_window1kb.*
 seqpos2.egg-info/
 test.fa*
 build
+*1kb
+*.68321

@@ -12,6 +12,26 @@ import os
 import bgcount
 import _motif
 
+def main(args):
+    fa, fa_name = bgcount.scanfa(args.f)
+    if not os.path.exists(args.f + '.npy'):
+        bg = bgcount.count(fa)
+        np.save(args.f + '.npy', bg)
+    else:
+        bg = np.load(args.f + '.npy')
+    p = np.loadtxt(args.p)
+    markov_order = 2
+    s_idx, start, end, orient, score = _motif.seqscan(fa, p, list(bg), markov_order, args.m)
+    with open(args.o, 'w') as outf:
+        #for i, j in zip(list(s_idx), list(score)): # corrupted double-linked list, core dumped??
+        #    print >>outf, fa_name[i], j
+        for i in range(s_idx.shape[0]):
+            print >>outf, fa_name[s_idx[i]], score[i]
+
+def trace(frame, event, arg):
+    print "%s, %s:%d" % (event, frame.f_code.co_filename, frame.f_lineno)
+    return trace
+
 if __name__ == '__main__':
     p = argparse.ArgumentParser()
     p.add_argument('-f', help='fasta file')
@@ -23,16 +43,6 @@ if __name__ == '__main__':
     if not (args.f and args.p):
         p.print_help()
         sys.exit(1)
+    #sys.settrace(trace)
+    main(args)
 
-    fa, fa_name = bgcount.scanfa(args.f)
-    if not os.path.exists(args.f + '.npy'):
-        bg = bgcount.count(fa)
-        np.save(args.f + '.npy', bg)
-    else:
-        bg = np.load(args.f + '.npy')
-    p = np.loadtxt(args.p)
-    markov_order = 2
-    s_idx, start, end, orient, score = _motif.seqscan(fa, p, list(bg), markov_order, args.m)
-    with open(args.o, 'w') as outf:
-        for i, j in zip(s_idx,score):
-            print >>outf, fa_name[i], j
