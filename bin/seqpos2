@@ -14,14 +14,19 @@ import _motif
 
 def main(args):
     fa, fa_name = bgcount.scanfa(args.f)
-    if not os.path.exists(args.f + '.npy'):
-        bg = bgcount.count(fa)
-        np.save(args.f + '.npy', bg)
-    else:
-        bg = np.load(args.f + '.npy')
+
+    #if not os.path.exists(args.f + '.npy'):
+    #    bg = bgcount.count(fa)
+    #    np.save(args.f + '.npy', bg)
+    #else:
+    #    bg = np.load(args.f + '.npy')
+
     p = np.loadtxt(args.p)
     markov_order = 2
-    s_idx, start, end, orient, score = _motif.seqscan(fa, p, list(bg), markov_order, args.m)
+    # s_idx, start, end, orient, score = _motif.seqscan(fa, p, list(bg), markov_order, args.m)
+
+    # shut off the background
+    s_idx, start, end, orient, score = _motif.seqscan(fa, p, [], markov_order, args.m)
     with open(args.o, 'w') as outf:
         #for i, j in zip(list(s_idx), list(score)): # corrupted double-linked list, core dumped??
         #    print >>outf, fa_name[i], j
