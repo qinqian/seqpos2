@@ -35,14 +35,20 @@ def scanfa(fa):
     num = 0
     fal = []
     fan = []
+    frequency = 1000 * 2
     with open(fa) as inf:
         for line in inf:
-             if num % 2 == 0:
-                 fan.append(line.strip()[1:])
-             else:
-                 fal.append(line.strip().upper())
-             num+=1
-    return fal, fan
+            if num % 2 == 0:
+                fan.append(line.strip()[1:])
+            else:
+                fal.append(line.strip().upper())
+            num+=1
+            if num % frequency == 0:
+                yield fal, fan
+                num = 0
+                fan = []; fal = []
+
+    #return fal, fan
 
 def count(seqs, length=3):
     #print seqs
