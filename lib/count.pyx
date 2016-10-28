@@ -48,7 +48,7 @@ def scanfa(fa):
                 num = 0
                 fan = []; fal = []
 
-    #return fal, fan
+    yield fal, fan
 
 def count(seqs, length=3):
     #print seqs
