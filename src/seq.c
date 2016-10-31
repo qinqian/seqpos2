@@ -113,9 +113,9 @@ static PyObject *seqscan(PyObject *self, PyObject *args)
     if ( motifBases != 4 )
         return PyErr_Format( PyExc_RuntimeError, "Incorrect PSSM dimension not 4 (%d)", motifBases);
 
-    printf("%d\n", 1);
+    //printf("%d\n", 1);
     pssm_p = ( float ** )malloc( motifLength*sizeof( float * ) );
-    printf("%d\n", 2);
+    //printf("%d\n", 2);
     for ( i = 0; i < motifLength; i++ ) {
         pssm_p[i] = ( float * )malloc( 4*sizeof( float ) );
         for( j = 0; j < 4; j++ ){
@@ -125,7 +125,7 @@ static PyObject *seqscan(PyObject *self, PyObject *args)
     }
     seqarray  = (int ** )malloc((numLines)*sizeof(int *));
     locations = (int ** )malloc((numLines)*sizeof(int *));
-    printf("%d\n", 3);
+    //printf("%d\n", 3);
     //motif_record = ( struct motif_T * )malloc( MAXMOTIFS*sizeof( struct motif_T ));
     /* iterate over items of the list, grabbing strings, and parsing for numbers */
     for (i=0; i<numLines; i++){
@@ -159,7 +159,7 @@ static PyObject *seqscan(PyObject *self, PyObject *args)
         } 
     }
 
-    printf("%d\n", 4);
+    //printf("%d\n", 4);
     // allocate and initialize motif_record 
     motif_record = ( struct motif_T * )malloc( numLines*sizeof( struct motif_T ));
     //n_motif_record = MAXMOTIFS+numChars;
@@ -180,7 +180,7 @@ static PyObject *seqscan(PyObject *self, PyObject *args)
  
     motifscan_subseq( seqarray, locations, numLines, pssm_p, motifLength, bgmkv, motif_record, 0, bgprob, cond2g1, cond3g2, prob_option );
 
-    printf("%d\n", 5);
+    //printf("%d\n", 5);
 
     dims[0] = numLines;
     dims[1] = 1;
@@ -189,7 +189,7 @@ static PyObject *seqscan(PyObject *self, PyObject *args)
     motifEnd    = (PyArrayObject *) PyArray_SimpleNew( 1, dims, PyArray_INT );
     motifOrient = (PyArrayObject *) PyArray_SimpleNew( 1, dims, PyArray_INT );
     motifScore  = ( PyArrayObject * )PyArray_SimpleNew( 1, dims, PyArray_FLOAT );
-    printf("%d\n", 6);
+    //printf("%d\n", 6);
     for( i = 0; i < numLines; i++ ){
     //for( i = 0; i < numHits; i++ ){
         *( int * )( motifIdx->data     + i*motifIdx->strides[0] )    = (int)( motif_record[i].iseq );
@@ -199,7 +199,7 @@ static PyObject *seqscan(PyObject *self, PyObject *args)
         *( float * )( motifScore->data + i*motifScore->strides[0] )  = (float)( motif_record[i].score );
     }
 
-    printf("%d\n", 7);
+    //printf("%d\n", 7);
     for (i = 0; i < numLines; i++){
         free( seqarray[i] );
         free( locations[i] );
@@ -212,14 +212,14 @@ static PyObject *seqscan(PyObject *self, PyObject *args)
     } 
     free( pssm_p );
     Py_ret = ( PyObject * )Py_BuildValue( "OOOOO", motifIdx, motifStart, motifEnd, motifOrient, motifScore );
-    printf("%d\n", 8);
+    //printf("%d\n", 8);
     //Py_DECREF( pssmArrayObj );
     Py_DECREF( motifIdx );
     Py_DECREF( motifStart );
     Py_DECREF( motifEnd );
     Py_DECREF( motifOrient );
     Py_DECREF( motifScore );
-    printf("%d\n", 9);
+    //printf("%d\n", 9);
     return Py_ret; 
 }
 
