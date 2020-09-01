@@ -8,7 +8,7 @@ import pickle
 import glob
 #fs = ['cistrome/MS00011.pwm.100bp.bin.npy', 'cistrome/MS00023.pwm.100bp.bin.npy']
 fs = glob.glob('cistrome/*bin.npy')
-percentage_cutoff = 97
+percentage_cutoff = 99
 window_map = np.load(os.path.expanduser('~/MARGE/PhaseA_motif_deltarp/hg38_100to1000window.out.npy'))
 
 def load_motif_meta(map_motifsym):

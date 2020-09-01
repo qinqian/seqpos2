@@ -31,7 +31,7 @@ def load_motif_sites(motif_annotation, f):
     #print score.shape
     #score = score.astype(np.float32)
     cutoff = np.percentile(score, percentage_cutoff)
-    Y, = np.where(score > cutoff)
+    Y, = np.where(score > cutoff) # 0-based..
     return (motif, idx, Y)
     #return (motif, idx, 'debug')
 
